@@ -1355,7 +1355,7 @@ $.extend(Selectize.prototype, {
 	/**
 	 * Clears all options.
 	 */
-	clearOptions: function() {
+	clearOptions: function(silent) {
 		var self = this;
 
 		self.loadedSearches = {};
@@ -1364,8 +1364,18 @@ $.extend(Selectize.prototype, {
 		self.options = self.sifter.items = {};
 		self.lastQuery = null;
 		self.trigger('option_clear');
-		self.clear();
+		self.clear(silent);
 	},
+
+    reset: function (items, value, silent) {
+        var self  = this;
+
+        self.clearOptions(true);
+        self.addOption(items);
+        self.refreshOptions(self.isFocused && !self.isInputHidden);
+        self.setValue(value, silent);
+        self.trigger('load', items);
+    },
 
 	/**
 	 * Returns the jQuery element of the option
