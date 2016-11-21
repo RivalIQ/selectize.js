@@ -2585,7 +2585,8 @@
 	
 			// add mandatory attributes
 			if (templateName === 'option' || templateName === 'option_create') {
-				html.attr('data-selectable', '');
+	            var dataAttr = (data.disabled ? 'data-disabled' : 'data-selectable');
+				html.attr(dataAttr, '');
 			}
 			else if (templateName === 'optgroup') {
 				id = data[self.settings.optgroupValueField] || '';
