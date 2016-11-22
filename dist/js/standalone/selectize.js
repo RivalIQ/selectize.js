@@ -1154,6 +1154,7 @@
 			ignoreBlur       : false,
 			ignoreHover      : false,
 			hasOptions       : false,
+	        noEmptySelection : false,
 			currentResults   : null,
 			lastValue        : '',
 			caretPos         : 0,
@@ -1770,6 +1771,11 @@
 	
 				self.ignoreFocus = false;
 				self.trigger('blur');
+	
+	            // Reset hidden value
+	            if (!self.items.length && self.settings.noEmptySelection) {
+	                self.addItem(self.hiddenItemValue, true);
+	            }
 			};
 	
 			self.ignoreFocus = true;
@@ -2997,7 +3003,13 @@
 				self.setCaret(caret);
 			}
 			while (values.length) {
-				self.removeItem(values.pop());
+	            var value = values.pop();
+	
+	            if (self.settings.noEmptySelection && !values.length) {
+	                self.hiddenItemValue = value;
+	            }
+	
+	            self.removeItem(value, self.settings.noEmptySelection);
 			}
 	
 			self.showInput();

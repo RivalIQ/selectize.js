@@ -34,6 +34,7 @@ var Selectize = function($input, settings) {
 		ignoreBlur       : false,
 		ignoreHover      : false,
 		hasOptions       : false,
+        noEmptySelection : false,
 		currentResults   : null,
 		lastValue        : '',
 		caretPos         : 0,
@@ -650,6 +651,11 @@ $.extend(Selectize.prototype, {
 
 			self.ignoreFocus = false;
 			self.trigger('blur');
+
+            // Reset hidden value
+            if (!self.items.length && self.settings.noEmptySelection) {
+                self.addItem(self.hiddenItemValue, true);
+            }
 		};
 
 		self.ignoreFocus = true;
@@ -1877,7 +1883,13 @@ $.extend(Selectize.prototype, {
 			self.setCaret(caret);
 		}
 		while (values.length) {
-			self.removeItem(values.pop());
+            var value = values.pop();
+
+            if (self.settings.noEmptySelection && !values.length) {
+                self.hiddenItemValue = value;
+            }
+
+            self.removeItem(value, self.settings.noEmptySelection);
 		}
 
 		self.showInput();
