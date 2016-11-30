@@ -808,6 +808,7 @@
 			var key, fn, callbacks = {
 				'initialize'      : 'onInitialize',
 				'change'          : 'onChange',
+				'before_item_add' : 'onBeforeItemAdd',
 				'item_add'        : 'onItemAdd',
 				'item_remove'     : 'onItemRemove',
 				'clear'           : 'onClear',
@@ -1977,6 +1978,7 @@
 	
 				if (self.isSetup) {
 					$options = self.$dropdown_content.find('[data-selectable]');
+					self.trigger('before_item_add', value, $item);
 	
 					// update menu / remove the option (if this is not one item being added as part of series)
 					if (!self.isPending) {
@@ -2234,7 +2236,7 @@
 			var self = this;
 	
 			if (self.isLocked || self.isOpen || (self.settings.mode === 'multi' && self.isFull())) return;
-			self.focus();
+			if (!self.isFocused) self.focus();
 			self.isOpen = true;
 			self.refreshState();
 			self.$dropdown.css({visibility: 'hidden', display: 'block'});
